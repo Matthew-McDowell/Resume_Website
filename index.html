@@ -1,206 +1,434 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <link rel="stylesheet" href="styles.css" />
-    <link
-      rel="stylesheet"
-      href="https://use.fontawesome.com/releases/v5.8.2/css/all.css"
-      integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay"
-      crossorigin="anonymous"
-    />
-    <link
-      href="https://fonts.googleapis.com/css?family=Poppins:200i,300,400&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      href="https://fonts.googleapis.com/css?family=Raleway:700&display=swap"
-      rel="stylesheet"
-    />
-  </head>
-  <body>
-    <!-- START NAV -->
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>// MATTHEW J. MCDOWELL — PROJECTS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --bg:#02040a;
+    --blue:#16e0ff;        /* electric cyan-blue */
+    --blue2:#2b7bff;       /* deeper azure */
+    --ice:#aef6ff;         /* ice highlight */
+    --white:#eafdff;
+    --text:#bcd6f0;
+    --muted:#5d6c93;
+    --glow-b:0 0 6px #16e0ff,0 0 20px rgba(22,224,255,.65);
+    --glow-a:0 0 6px #2b7bff,0 0 18px rgba(43,123,255,.55);
+    --mono:'Share Tech Mono',ui-monospace,monospace;
+    --display:'Orbitron',var(--mono);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--text);font-family:var(--mono);overflow-x:hidden;line-height:1.6;cursor:none}
+  a{color:inherit;text-decoration:none}
+  ::selection{background:var(--blue);color:#02040a}
 
-    <nav id="navbar" class="nav">
-      <ul class="nav-list">
-        <li>
-          <a href="#welcome-section">About</a>
-        </li>
-        <li>
-          <a href="#projects">Work</a>
-        </li>
-        <li>
-          <a href="#contact">Contact</a>
-        </li>
-      </ul>
-    </nav>
+  /* ---------- backgrounds ---------- */
+  #net{position:fixed;inset:0;z-index:-3}
+  .grid-floor{position:fixed;inset:0;z-index:-2;pointer-events:none;
+    background:
+      radial-gradient(circle at 50% 120%, rgba(43,123,255,.20), transparent 55%),
+      radial-gradient(circle at 80% -10%, rgba(22,224,255,.14), transparent 45%),
+      radial-gradient(circle at 12% 0%, rgba(43,123,255,.14), transparent 45%);}
+  #flash{position:fixed;inset:0;z-index:-1;pointer-events:none;background:rgba(120,200,255,.6);opacity:0}
 
-    <!-- END NAV -->
+  .fx{position:fixed;inset:0;z-index:60;pointer-events:none}
+  .scan{background:repeating-linear-gradient(0deg,rgba(0,0,0,0) 0,rgba(0,0,0,0) 2px,rgba(0,0,0,.16) 3px,rgba(0,0,0,0) 4px);
+    mix-blend-mode:multiply;animation:scanmove 8s linear infinite}
+  @keyframes scanmove{to{background-position:0 100px}}
+  .vignette{box-shadow:inset 0 0 220px 40px rgba(0,0,0,.85)}
+  .flicker{background:rgba(40,120,220,.03);animation:flick 6s steps(2) infinite}
+  @keyframes flick{0%,97%,100%{opacity:0}98%{opacity:.7}}
 
-    <!-- START WELCOME SECTION -->
+  /* ---------- cursor ---------- */
+  .cursor{position:fixed;width:26px;height:26px;border:1px solid var(--blue);border-radius:50%;
+    transform:translate(-50%,-50%);z-index:80;pointer-events:none;box-shadow:var(--glow-b);
+    transition:width .15s,height .15s,background .15s,border-color .15s}
+  .cursor.dot{width:5px;height:5px;background:var(--ice);border-color:var(--ice)}
+  .cursor.hover{width:46px;height:46px;border-color:var(--ice);background:rgba(22,224,255,.10)}
 
-    <section id="welcome-section" class="welcome-section">
-      <h1>Hey I am Matthew McDowell</h1>
-      <p>a software developer</p>
-    </section>
+  /* ---------- boot ---------- */
+  #boot{position:fixed;inset:0;z-index:100;background:#010206;display:flex;align-items:center;justify-content:center;flex-direction:column}
+  #boot .term{width:min(640px,88vw);color:var(--blue);font-size:14px}
+  #boot .line{white-space:pre-wrap;text-shadow:var(--glow-b)}
+  #boot .bar{height:10px;border:1px solid var(--blue);margin-top:14px;box-shadow:var(--glow-b)}
+  #boot .bar i{display:block;height:100%;width:0;background:var(--blue);box-shadow:0 0 14px var(--blue)}
+  #boot .skip{margin-top:18px;color:var(--muted);font-size:12px;letter-spacing:2px}
+  #boot.gone{opacity:0;transform:scale(1.08);pointer-events:none;transition:opacity .6s,transform .6s}
 
-    <!-- END WELCOME SECTION -->
+  /* ---------- nav ---------- */
+  header{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;justify-content:space-between;align-items:center;
+    padding:18px 30px;backdrop-filter:blur(6px);border-bottom:1px solid rgba(22,224,255,.18);background:rgba(2,4,10,.5)}
+  .brand{font-family:var(--display);font-weight:900;letter-spacing:3px;font-size:18px;color:#fff;text-shadow:var(--glow-b)}
+  .brand b{color:var(--blue)}
+  nav a{margin-left:26px;font-size:13px;letter-spacing:2px;color:var(--muted);transition:color .2s,text-shadow .2s}
+  nav a:hover{color:var(--blue);text-shadow:var(--glow-b)}
+  @media(max-width:640px){nav{display:none}}
 
-    <!-- START PROJECTS SECTION -->
+  /* ---------- layout ---------- */
+  section{position:relative;z-index:1;padding:120px 30px;max-width:1100px;margin:0 auto}
+  .eyebrow{font-size:12px;letter-spacing:6px;color:var(--blue);text-shadow:var(--glow-b);margin-bottom:18px}
+  h2.title{font-family:var(--display);font-weight:700;font-size:clamp(26px,4vw,44px);letter-spacing:2px;color:#fff;margin-bottom:10px}
+  h2.title::before{content:"\26A1 ";color:var(--blue)}
 
-    <section id="projects" class="projects-section">
-      <h2 class="projects-section-header">These are some of my projects</h2>
+  /* ---------- hero ---------- */
+  #hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding-top:120px}
+  .glitch{font-family:var(--display);font-weight:900;font-size:clamp(40px,9vw,110px);line-height:.95;letter-spacing:2px;
+    color:#fff;position:relative;text-shadow:var(--glow-b)}
+  .glitch::before,.glitch::after{content:attr(data-text);position:absolute;left:0;top:0;width:100%;overflow:hidden}
+  .glitch::before{color:var(--ice);clip-path:inset(0 0 55% 0);animation:gl1 3.2s infinite linear alternate}
+  .glitch::after{color:var(--blue2);clip-path:inset(55% 0 0 0);animation:gl2 2.6s infinite linear alternate}
+  @keyframes gl1{0%,92%,100%{transform:translate(0,0)}93%{transform:translate(-4px,-2px)}96%{transform:translate(3px,1px)}}
+  @keyframes gl2{0%,90%,100%{transform:translate(0,0)}91%{transform:translate(4px,2px)}97%{transform:translate(-3px,-1px)}}
+  .sub{margin-top:26px;font-size:clamp(15px,2vw,20px);color:var(--blue);min-height:1.6em;text-shadow:var(--glow-b)}
+  .sub .cur{color:var(--ice);animation:blink 1s steps(2) infinite}
+  @keyframes blink{50%{opacity:0}}
+  .hero-tags{margin-top:30px;display:flex;flex-wrap:wrap;gap:10px}
+  .pill{border:1px solid rgba(22,224,255,.45);padding:6px 14px;font-size:12px;letter-spacing:2px;color:var(--blue)}
+  .scrollcue{margin-top:60px;color:var(--muted);font-size:12px;letter-spacing:3px;animation:bob 2s ease-in-out infinite}
+  @keyframes bob{50%{transform:translateY(8px)}}
 
-      <div class="projects-grid">
-        <a
-          href=""
-          target="_blank"
-          class="project project-tile"
-        >
-          <img
-            class="project-image"
-            src=""
-            alt="project"
-          />
-          <p class="project-title">
-            <span class="code">&lt;</span>
-            Nasa Webscraping
-            <span class="code">&#47;&gt;</span>
-          </p>
-        </a>
-        <a
-          href=""
-          target="_blank"
-          class="project project-tile"
-        >
-          <img
-            class="project-image"
-            src=""
-            alt="project"
-          />
-          <p class="project-title">
-            <span class="code">&lt;</span>
-            A*Pathfinder Algorithm
-            <span class="code">&#47;&gt;</span>
-          </p>
-        </a>
-        <a
-          href=""
-          target="_blank"
-          class="project project-tile"
-        >
-          <img
-            class="project-image"
-            src=""
-            alt="project"
-          />
-          <p class="project-title">
-            <span class="code">&lt;</span>
-            JavaScript Calculator
-            <span class="code">&#47;&gt;</span>
-          </p>
-        </a>
-        <a
-          href=""
-          target="_blank"
-          class="project project-tile"
-        >
-          <img
-            class="project-image"
-            src=""
-            alt="project"
-          />
-          <p class="project-title">
-            <span class="code">&lt;</span>
-            Sudoku Solver
-            <span class="code">&#47;&gt;</span>
-          </p>
-        </a>
-        <a
-          href=""
-          target="_blank"
-          class="project project-tile"
-        >
-          <img
-            class="project-image"
-            src=""
-            alt="project"
-          />
-          <p class="project-title">
-            <span class="code">&lt;</span>
-            C++ Image Editor
-            <span class="code">&#47;&gt;</span>
-          </p>
-        </a>
-        <a
-          href=""
-          target="_blank"
-          class="project project-tile"
-        >
-          <img
-            class="project-image"
-            src=""
-            alt="project"
-          />
-          <p class="project-title">
-            <span class="code">&lt;</span>
-            Python Image to PDF
-            <span class="code">&#47;&gt;</span>
-          </p>
-        </a>
-      </div>
+  /* ---------- cards ---------- */
+  .cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:26px;margin-top:50px}
+  .card{position:relative;background:linear-gradient(160deg,rgba(10,22,46,.92),rgba(4,8,20,.92));
+    border:1px solid rgba(22,224,255,.24);padding:28px;overflow:hidden;transform-style:preserve-3d;
+    transition:transform .1s ease-out,border-color .3s,box-shadow .3s}
+  .card::before{content:"";position:absolute;inset:0;
+    background:linear-gradient(120deg,transparent 30%,rgba(22,224,255,.12),transparent 70%);
+    transform:translateX(-100%);transition:transform .6s}
+  .card:hover{border-color:var(--blue);box-shadow:0 0 30px rgba(22,224,255,.28),inset 0 0 30px rgba(43,123,255,.08)}
+  .card:hover::before{transform:translateX(100%)}
+  .card .idx{font-size:12px;color:var(--blue);letter-spacing:3px}
+  .card h3{font-family:var(--display);font-weight:700;font-size:21px;margin:10px 0 4px;color:#fff}
+  .card .status{font-size:11px;letter-spacing:2px;color:var(--blue);margin-bottom:14px}
+  .card p{font-size:14px;color:var(--text);opacity:.85}
+  .card .tags{display:flex;flex-wrap:wrap;gap:7px;margin:16px 0 18px}
+  .card .tags span{font-size:11px;color:var(--muted);border:1px solid rgba(93,108,147,.45);padding:3px 8px}
+  .card .access{display:inline-flex;align-items:center;gap:8px;font-size:12px;letter-spacing:3px;color:var(--blue);
+    border:1px solid var(--blue);padding:8px 16px;transition:all .25s}
+  .card .access:hover{background:var(--blue);color:#02040a;box-shadow:var(--glow-b)}
+  .card.locked{border-style:dashed;opacity:.78}
+  .card.locked h3{color:var(--muted)}
 
-      <a
-        href=""
-        class="btn btn-show-all"
-        target="_blank"
-        >Show all<i class="fas fa-chevron-right"></i
-      ></a>
-    </section>
+  /* ---------- about/contact ---------- */
+  .about-grid{display:grid;grid-template-columns:1.4fr 1fr;gap:40px;margin-top:40px}
+  @media(max-width:760px){.about-grid{grid-template-columns:1fr}}
+  .about-grid p{margin-bottom:16px;opacity:.9}
+  .stats{border:1px solid rgba(22,224,255,.22);padding:24px}
+  .stat{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px dashed rgba(93,108,147,.3);font-size:13px}
+  .stat:last-child{border:0}
+  .stat b{color:var(--blue);text-shadow:var(--glow-b)}
+  .contact-links{display:flex;flex-wrap:wrap;gap:16px;margin-top:36px}
+  .contact-links a{border:1px solid rgba(22,224,255,.45);padding:14px 22px;letter-spacing:2px;font-size:13px;color:#fff;transition:all .25s}
+  .contact-links a:hover{background:rgba(22,224,255,.12);box-shadow:var(--glow-b);border-color:var(--blue)}
 
-    <!-- END PROJECTS SECTION -->
+  footer{position:relative;z-index:1;text-align:center;padding:40px;color:var(--muted);font-size:12px;letter-spacing:2px;border-top:1px solid rgba(22,224,255,.14)}
 
-    <!-- START CONTACT SECTION -->
+  .reveal{opacity:0;transform:translateY(30px);transition:opacity .7s,transform .7s}
+  .reveal.visible{opacity:1;transform:none}
 
-    <section id="contact" class="contact-section">
-      <div class="contact-section-header">
-        <h2>Contact Me</h2>
-        <p>However you prefer</p>
-      </div>
-      <div class="contact-links">
-        <a
-          href="https://www.linkedin.com/in/matthew-mcdowell-b9597b200/p"
-          target="_blank"
-          class="btn contact-details"
-          ><i class="fab fa-linkedin"></i> Linkedin</a
-        >
-        <a
-          id="profile-link"
-          href="https://github.com/Matthew-McDowell"
-          target="_blank"
-          class="btn contact-details"
-          ><i class="fab fa-github"></i> GitHub</a
-        >
-        <a href="mailto:justin.mcdowell@gmail.com" class="btn contact-details"><i class="fas fa-at"></i> Email</a
-        >
-        <a href="tel:210-649-9919" class="btn contact-details"
-          ><i class="fas fa-mobile-alt"></i> Phone</a
-        >
-      </div>
-    </section>
+  .ticker{position:fixed;bottom:0;left:0;right:0;z-index:40;background:rgba(2,4,10,.72);border-top:1px solid rgba(22,224,255,.18);
+    overflow:hidden;white-space:nowrap;font-size:11px;letter-spacing:2px;color:var(--muted);padding:6px 0}
+  .ticker span{display:inline-block;padding-left:100%;animation:tick 28s linear infinite}
+  @keyframes tick{to{transform:translateX(-100%)}}
+  .dlbtn{display:inline-flex;align-items:center;gap:10px;font-family:var(--display);font-weight:700;
+    letter-spacing:3px;font-size:13px;color:#02040a;background:var(--blue);border:1px solid var(--blue);
+    padding:14px 26px;box-shadow:var(--glow-b);transition:all .25s}
+  .dlbtn:hover{background:var(--ice);border-color:var(--ice);transform:translateY(-2px);
+    box-shadow:0 0 10px var(--ice),0 0 28px rgba(174,246,255,.6)}
+  .hero-cta{margin-top:34px}
+</style>
+</head>
+<body>
 
-    <!-- END CONTACT SECTION -->
+<canvas id="net"></canvas>
+<div class="grid-floor"></div>
+<div id="flash"></div>
+<div class="fx scan"></div>
+<div class="fx flicker"></div>
+<div class="fx vignette"></div>
+<div class="cursor" id="cursor"></div>
 
-    <!-- START FOOTER SECTION -->
+<!-- ===== BOOT ===== -->
+<div id="boot">
+  <div class="term">
+    <div class="line" id="bootlines"></div>
+    <div class="bar"><i id="bootbar"></i></div>
+    <div class="skip">[ CLICK OR PRESS ANY KEY TO SKIP ]</div>
+  </div>
+</div>
 
-    <footer>
-      <p>
-        **This portfolio is a work in progress and is subject to change as I improve.
-      </p>
-      <p>
-        &copy; Created by Matthew McDowell
-      </p>
-    </footer>
+<!-- ===== NAV ===== -->
+<header>
+  <div class="brand">MJM<b>&#9889;</b>SYS</div>   <!-- EDIT: your handle -->
+  <nav>
+    <a href="#hero">HOME</a>
+    <a href="#projects">PROJECTS</a>
+    <a href="#about">ABOUT</a>
+    <a href="#contact">CONTACT</a>
+    <a href="Matthew_McDowell_Resume.pdf" download>RESUME</a>
+  </nav>
+</header>
 
-    <!-- END FOOTER SECTION -->
-  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script></body>
+<!-- ===== HERO ===== -->
+<section id="hero">
+  <div class="eyebrow reveal">SYSTEM ENERGIZED // OPERATOR PROFILE</div>
+  <!-- EDIT: your name -->
+  <h1 class="glitch" data-text="MATTHEW J. MCDOWELL">MATTHEW J. MCDOWELL</h1>
+  <div class="sub"><span id="typed"></span><span class="cur">&#9608;</span></div>
+  <div class="hero-tags reveal">
+    <span class="pill">POWER SYSTEMS</span>
+    <span class="pill">DATA ANALYTICS</span>
+    <span class="pill">OPEN SOURCE</span>
+    <span class="pill">GRID / IBR</span>
+    <span class="pill">PYTHON</span>
+  </div>
+  <div class="hero-cta reveal"><a class="dlbtn" href="Matthew_McDowell_Resume.pdf" download>DOWNLOAD RESUME &#10515;</a></div>
+  <div class="scrollcue">&#9660; SCROLL TO ENERGIZE ARCHIVE</div>
+</section>
+
+<!-- ===== PROJECTS ===== -->
+<section id="projects">
+  <div class="eyebrow reveal">DATA ARCHIVE</div>
+  <h2 class="title reveal">PROJECTS</h2>
+  <div class="cards">
+
+    <article class="card reveal">
+      <div class="idx">PRJ_001</div>
+      <h3>ESR-VERIFY</h3>
+      <div class="status">&#9889; ACTIVE / OPEN-SOURCE</div>
+      <p>Open-source dynamic model verification for grid-scale battery storage
+      (NERC MOD-026-2 / MOD-027, ERCOT). Plays back a recorded disturbance, scores
+      the plant's simulation model against the measurement across pre/disturbance/
+      post windows — no proprietary simulator required.</p>
+      <div class="tags"><span>Python</span><span>NERC</span><span>Data Analytics</span><span>ANDES</span><span>Power Systems</span></div>
+      <!-- EDIT: real repo link -->
+      <a class="access" href="#" target="_blank" rel="noopener">ACCESS &#9656;</a>
+    </article>
+
+    <article class="card locked reveal">
+      <div class="idx">PRJ_002</div>
+      <h3>[PROJECT_NAME]</h3>
+      <div class="status">&#9889; OFFLINE</div>
+      <p>[Short description of the project. What it does, the stack, why it matters.
+      Replace this text and the tags below.]</p>
+      <div class="tags"><span>TAG</span><span>TAG</span><span>TAG</span></div>
+      <a class="access" href="#" target="_blank" rel="noopener">ACCESS &#9656;</a>
+    </article>
+
+    <article class="card locked reveal">
+      <div class="idx">PRJ_003</div>
+      <h3>[PROJECT_NAME]</h3>
+      <div class="status">&#9889; OFFLINE</div>
+      <p>[Short description of the project. What it does, the stack, why it matters.
+      Replace this text and the tags below.]</p>
+      <div class="tags"><span>TAG</span><span>TAG</span><span>TAG</span></div>
+      <a class="access" href="#" target="_blank" rel="noopener">ACCESS &#9656;</a>
+    </article>
+
+    <article class="card locked reveal">
+      <div class="idx">PRJ_004</div>
+      <h3>[PROJECT_NAME]</h3>
+      <div class="status">&#9889; OFFLINE</div>
+      <p>[Short description of the project. What it does, the stack, why it matters.
+      Replace this text and the tags below.]</p>
+      <div class="tags"><span>TAG</span><span>TAG</span><span>TAG</span></div>
+      <a class="access" href="#" target="_blank" rel="noopener">ACCESS &#9656;</a>
+    </article>
+
+  </div>
+</section>
+
+<!-- ===== ABOUT ===== -->
+<section id="about">
+  <div class="eyebrow reveal">OPERATOR DOSSIER</div>
+  <h2 class="title reveal">ABOUT</h2>
+  <div class="about-grid">
+    <div class="reveal">
+      <p>I'm an engineer on ERCOT's Operation Analytics team, where I monitor
+      the real-time performance of energy storage resources and tune the EMS systems —
+      Load Frequency Control, the Resource Limit Calculator, and Generation-to-be-Dispatched —
+      that keep grid frequency stable. I build Python tooling and apply statistical,
+      probabilistic, and machine-learning methods to quantify ancillary services and
+      sharpen reliability monitoring.</p>
+      <p>Texas A&amp;M electrical engineering grad (3.9 GPA, minors in CS and math), with
+      prior stints at EDP Renewables and Amazon. I like turning messy grid data into
+      decisions — and I'm currently building open-source tooling around BESS verification
+      and dispatch economics. Targeting energy-storage and grid roles in the Pacific Northwest, or remote.</p>
+    </div>
+    <div class="stats reveal">
+      <div class="stat"><span>STATUS</span><b>OPEN TO ROLES</b></div>
+      <div class="stat"><span>ROLE</span><b>OPS ENGINEER &middot; ERCOT</b></div>
+      <div class="stat"><span>FOCUS</span><b>ESR &middot; BESS &middot; GRID</b></div>
+      <div class="stat"><span>METHODS</span><b>DATA ANALYTICS / ML</b></div>
+      <div class="stat"><span>LOCATION</span><b>AUSTIN &#8594; PNW / REMOTE</b></div>
+      <div class="stat"><span>UPTIME</span><b id="uptime">00:00:00</b></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CONTACT ===== -->
+<section id="contact">
+  <div class="eyebrow reveal">ESTABLISH UPLINK</div>
+  <h2 class="title reveal">CONTACT</h2>
+  <p class="reveal" style="opacity:.85;max-width:560px">Open to BESS integration and grid-storage roles in the Pacific Northwest or remote, and to collaboration on open-source grid tooling. Let's talk.</p>
+  <div class="contact-links reveal">
+    <a class="dlbtn" href="Matthew_McDowell_Resume.pdf" download>DOWNLOAD RESUME &#10515;</a>
+    <a href="https://github.com/Matthew-McDowell" target="_blank" rel="noopener">GITHUB &#9656;</a>
+    <a href="https://www.linkedin.com/in/matthew-mcdowell-b9597b200/" target="_blank" rel="noopener">LINKEDIN &#9656;</a>
+    <a href="mailto:justin.mcdowell@gmail.com">EMAIL &#9656;</a>
+  </div>
+</section>
+
+<footer>// BUILT IN THE DARK &#8212; <span id="year"></span> &#8212; VOLTAGE NOMINAL</footer>
+
+<div class="ticker"><span>&#9889; ESR-VERIFY: BUILD PASSING &nbsp;&nbsp;//&nbsp;&nbsp; GRID STATUS: STABLE &nbsp;&nbsp;//&nbsp;&nbsp; VOLTAGE: 1.00 PU &nbsp;&nbsp;//&nbsp;&nbsp; ARC LEVELS: HIGH &nbsp;&nbsp;//&nbsp;&nbsp; OPEN TO COLLAB &nbsp;&nbsp;//&nbsp;&nbsp; ESR-VERIFY: BUILD PASSING &nbsp;&nbsp;//&nbsp;&nbsp; GRID STATUS: STABLE &nbsp;&nbsp;//&nbsp;&nbsp; VOLTAGE: 1.00 PU &nbsp;&nbsp;//&nbsp;&nbsp; ARC LEVELS: HIGH</span></div>
+
+<script>
+/* ---------- cursor ---------- */
+const cur=document.getElementById('cursor');
+let cx=innerWidth/2,cy=innerHeight/2,tx=cx,ty=cy;
+addEventListener('mousemove',e=>{tx=e.clientX;ty=e.clientY});
+(function loop(){cx+=(tx-cx)*.18;cy+=(ty-cy)*.18;cur.style.left=cx+'px';cur.style.top=cy+'px';requestAnimationFrame(loop)})();
+addEventListener('mousedown',()=>cur.classList.add('dot'));
+addEventListener('mouseup',()=>cur.classList.remove('dot'));
+document.querySelectorAll('a,.card,.pill').forEach(el=>{
+  el.addEventListener('mouseenter',()=>cur.classList.add('hover'));
+  el.addEventListener('mouseleave',()=>cur.classList.remove('hover'));
+});
+
+/* ---------- electric field: nodes + arcs + lightning ---------- */
+const cv=document.getElementById('net'),ctx=cv.getContext('2d'),flash=document.getElementById('flash');
+let W,H,pts;
+function size(){W=cv.width=innerWidth;H=cv.height=innerHeight;
+  const n=Math.min(85,Math.floor(W*H/17000));
+  pts=Array.from({length:n},()=>({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.4,vy:(Math.random()-.5)*.4}));}
+size();addEventListener('resize',size);
+
+// jagged path between two points (midpoint displacement)
+function bolt(x1,y1,x2,y2,disp,detail){
+  let pa=[[x1,y1],[x2,y2]];
+  for(let it=0;it<detail;it++){
+    const np=[];
+    for(let i=0;i<pa.length-1;i++){
+      const a=pa[i],b=pa[i+1];
+      const mx=(a[0]+b[0])/2,my=(a[1]+b[1])/2;
+      const nx=-(b[1]-a[1]),ny=(b[0]-a[0]);
+      const len=Math.hypot(nx,ny)||1;const o=(Math.random()-.5)*disp;
+      np.push(a,[mx+nx/len*o,my+ny/len*o]);
+    }
+    np.push(pa[pa.length-1]);pa=np;disp*=.55;
+  }
+  return pa;
+}
+function stroke(path,color,w,glow){
+  ctx.beginPath();ctx.moveTo(path[0][0],path[0][1]);
+  for(let i=1;i<path.length;i++)ctx.lineTo(path[i][0],path[i][1]);
+  ctx.strokeStyle=color;ctx.lineWidth=w;ctx.shadowBlur=glow;ctx.shadowColor=color;ctx.stroke();ctx.shadowBlur=0;
+}
+
+let bolts=[];           // active screen lightning {path,life}
+function spawnBolt(){
+  // from a random edge point to a random node (or another edge)
+  const edge=()=>{const s=Math.random();return s<.5?[Math.random()*W,Math.random()<.5?0:H]:[Math.random()<.5?0:W,Math.random()*H];};
+  const a=edge();const b=pts.length?pts[(Math.random()*pts.length)|0]:{x:W/2,y:H/2};
+  bolts.push({path:bolt(a[0],a[1],b.x,b.y,90,5),life:1});
+  // brief screen flash
+  flash.style.transition='none';flash.style.opacity='.35';
+  requestAnimationFrame(()=>{flash.style.transition='opacity .5s';flash.style.opacity='0';});
+  setTimeout(spawnBolt, 2600+Math.random()*4200);
+}
+setTimeout(spawnBolt, 1800);
+
+function draw(){
+  ctx.clearRect(0,0,W,H);
+  // nodes
+  for(const p of pts){
+    p.x+=p.vx;p.y+=p.vy;
+    if(p.x<0||p.x>W)p.vx*=-1;if(p.y<0||p.y>H)p.vy*=-1;
+    const dxm=p.x-tx,dym=p.y-ty,dm=Math.hypot(dxm,dym);
+    if(dm<150){const f=(150-dm)/150*.7;p.x+=dxm/dm*f;p.y+=dym/dm*f;}
+    ctx.beginPath();ctx.arc(p.x,p.y,1.6,0,7);ctx.fillStyle='rgba(174,246,255,.9)';ctx.fill();
+  }
+  // faint network links
+  for(let i=0;i<pts.length;i++)for(let j=i+1;j<pts.length;j++){
+    const a=pts[i],b=pts[j],d=Math.hypot(a.x-b.x,a.y-b.y);
+    if(d<118){ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);
+      ctx.strokeStyle='rgba(43,123,255,'+(.5*(1-d/118))+')';ctx.lineWidth=.5;ctx.stroke();}
+  }
+  // electric arcs from nearby nodes to cursor
+  for(const p of pts){const d=Math.hypot(p.x-tx,p.y-ty);
+    if(d<190){const path=bolt(p.x,p.y,tx,ty,Math.min(18,d*.12),3);
+      stroke(path,'rgba(22,224,255,'+(.55*(1-d/190))+')',1,8);}}
+  // active screen bolts
+  bolts=bolts.filter(bt=>bt.life>0);
+  for(const bt of bolts){
+    stroke(bt.path,'rgba(174,246,255,'+bt.life+')',2.2,18);
+    stroke(bt.path,'rgba(22,224,255,'+(bt.life*.7)+')',0.8,6);
+    bt.life-=0.06;
+  }
+  requestAnimationFrame(draw);
+}
+draw();
+
+/* ---------- typed subtitle ---------- */
+const phrases=[
+  'power systems engineer // open-source builder',
+  'data analytics for the grid.',
+  'NERC compliance, automated.',
+  'i make grids tell the truth.'
+];
+let pi=0,ci=0,del=false;const typed=document.getElementById('typed');
+function type(){
+  const w=phrases[pi];
+  typed.textContent=del?w.slice(0,ci--):w.slice(0,ci++);
+  if(!del&&ci>w.length){del=true;setTimeout(type,1600);return;}
+  if(del&&ci<0){del=false;pi=(pi+1)%phrases.length;ci=0;}
+  setTimeout(type,del?35:65);
+}
+
+/* ---------- reveal ---------- */
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')}),{threshold:.15});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+/* ---------- card tilt ---------- */
+document.querySelectorAll('.card').forEach(card=>{
+  card.addEventListener('mousemove',e=>{
+    const r=card.getBoundingClientRect();
+    const rx=((e.clientY-r.top)/r.height-.5)*-8;
+    const ry=((e.clientX-r.left)/r.width-.5)*8;
+    card.style.transform='perspective(800px) rotateX('+rx+'deg) rotateY('+ry+'deg) translateY(-4px)';
+  });
+  card.addEventListener('mouseleave',()=>card.style.transform='');
+});
+
+/* ---------- uptime + year ---------- */
+const t0=Date.now();
+setInterval(()=>{const s=Math.floor((Date.now()-t0)/1000);
+  const h=String(Math.floor(s/3600)).padStart(2,'0');
+  const m=String(Math.floor(s%3600/60)).padStart(2,'0');
+  const ss=String(s%60).padStart(2,'0');
+  const el=document.getElementById('uptime');if(el)el.textContent=h+':'+m+':'+ss;},1000);
+document.getElementById('year').textContent=new Date().getFullYear();
+
+/* ---------- boot ---------- */
+const boot=document.getElementById('boot'),bl=document.getElementById('bootlines'),bar=document.getElementById('bootbar');
+const seq=['> ENERGIZE BUS .......... OK','> CLOSE BREAKER ......... OK','> SYNC TO GRID .......... OK',
+  '> DECRYPT ARCHIVE ....... OK','> CHARGE CAPACITORS ..... OK','> WELCOME, OPERATOR.'];
+let bi=0;
+function boots(){
+  if(bi<seq.length){bl.textContent+=seq[bi]+'\n';bar.style.width=((bi+1)/seq.length*100)+'%';bi++;setTimeout(boots,340);}
+  else setTimeout(endBoot,650);
+}
+function endBoot(){if(boot.classList.contains('gone'))return;boot.classList.add('gone');
+  setTimeout(()=>{boot.remove();type();},650);}
+addEventListener('keydown',endBoot,{once:true});
+boot.addEventListener('click',endBoot,{once:true});
+boots();
+</script>
+</body>
 </html>
